@@ -3,11 +3,9 @@ import Tkinter as tk
 import os
 import glob
 from Tkinter import *
-from tkMessageBox import *
-import cStringIO
-
 
 def run_fw_script():
+
 	notif_id = 0
 	device_id= ['*_H3C88AED8BABDC0F34DC_*.txt', '*_H33B116C5459404C247A_*.txt']
 
@@ -58,7 +56,8 @@ def run_sw_script():
 				b.append([line [7:]])
 		return (a,b)
 
-#def sheildbox_test(): #yala ne3mel 7aga
+def sheildbox_test():
+	print "Will update later"
 
 def about():
 	print("About!")
@@ -71,9 +70,6 @@ class testapp(tk.Frame):
 		self.master.title('Stiiv QA Tester \"Demo\" ')
 		self.pack_propagate(0)
 		self.pack()
-		self.KK = Label(self, text='Test instructions:') #REPLACE WITH FUNCTION THAT PRINTS INSTRUCTIONS FOR EACH TEST
-		self.createWidgets()
-		self.master.iconname("tkpython")
 
 		# Button 1
 		self.fw_button = tk.Button(self, text='FW Parsing Logs', command=run_fw_script)
@@ -84,25 +80,21 @@ class testapp(tk.Frame):
 		self.sw_button.pack(fill=tk.X, side=tk.TOP)
 
 		# Button 3
-		#self.sb_button = tk.Button(self, text='Connectivity Sheild Test', command=sheildbox_test)
-		#self.sb_button.pack(fill=tk.X, side=tk.TOP)
-
-		# Label
-		self.L1 = Label(text="Input Here:")
-		self.L1.pack( side = tk.TOP)
+		self.sb_button = tk.Button(self, text='Connectivity Sheild Test', command=sheildbox_test)
+		self.sb_button.pack(fill=tk.X, side=tk.TOP)
 
 		# Entry
-		self.E1 = Entry( bd =5)
-		self.E1.pack(side = tk.TOP)
+		self.entry = tk.Entry(self)
+		self.button = tk.Button(self, text="Submit", command=self.on_button)
+		self.button.pack(fill=tk.X, side=tk.BOTTOM)
+		self.entry.pack(fill=tk.X, side=tk.BOTTOM)
 
-		# Put the controls on the form
-				#self.submit = tk.Button(self, text = 'Submit', width=20,command=get_input)
+		#Bottom Bar: about & quit
+		self.KK = Label(self, text='Test instructions:') #REPLACE WITH FUNCTION THAT PRINTS INSTRUCTIONS FOR EACH TEST
+		self.createWidgets()
 
-
-
-		#self.something.pack(fill=tk.X, side=tk.BOTTOM)
-		#self.submit.pack(fill=tk.X, side=tk.BOTTOM)
-
+	def on_button(self):
+		print(self.entry.get())
 
 	def createWidgets(self):
 		self.makeMenuBar()
@@ -131,11 +123,11 @@ class testapp(tk.Frame):
 	def editMenu(self):
 		pulldown = Menu(self.menubar)
 		pulldown.add_command(label='Paste',   command=self.notdone)
-		pulldown.add_command(label='Spam',    command=self.greeting)
+		pulldown.add_command(label='About!',    command=self.greeting)
 		pulldown.add_separator()
 		pulldown.add_command(label='Delete',  command=self.greeting)
 		pulldown.entryconfig(4, state=DISABLED)
-		self.menubar.add_cascade(label='Edit', underline=0, menu=pulldown)
+		self.menubar.add_cascade(label='Help!', underline=0, menu=pulldown)
 
 	def greeting(self):
 		showinfo('About', 'Striiv Inc.'
@@ -143,7 +135,6 @@ class testapp(tk.Frame):
 						  '\nBeta ver.1     AUG2016')
 	def notdone(self):
 		showerror('Not implemented', 'Not yet available')
-
 	def quit(self):
 		if askyesno('Verify quit', 'Are you sure you want to quit?'):
 			Frame.quit(self)
@@ -152,16 +143,6 @@ class testapp(tk.Frame):
 		''' Run the app '''
 
 		self.mainloop()
-
-class NewMenuDemo(tk.Frame):
-	def __init__(self, parent=None):
-		Frame.__init__(self, parent)
-		self.L = Label(self, text='Test instructions:') #REPLACE WITH FUNCTION THAT PRINTS INSTRUCTIONS FOR EACH TEST
-		#self.pack(expand=YES, fill=BOTH, side=tk.BOTTOM )
-		self.createWidgets()
-		#self.master.title("Striiv QA Tester")
-		self.master.iconname("tkpython")
-
 
 
 if __name__=='__main__':
