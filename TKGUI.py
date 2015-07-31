@@ -58,7 +58,7 @@ def run_sw_script():
 				b.append([line [7:]])
 		return (a,b)
 
-#def sheildbox_test():
+#def sheildbox_test(): #yala ne3mel 7aga
 
 def about():
 	print("About!")
