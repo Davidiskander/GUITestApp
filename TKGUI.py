@@ -67,10 +67,13 @@ class testapp(tk.Frame):
 
 	# Frame creation
 	def __init__(self):
-		tk.Frame.__init__(self, master=None, width=500,height=200)
+		tk.Frame.__init__(self, master=None, width=500,height=600)
 		self.master.title('Stiiv QA Tester \"Demo\" ')
 		self.pack_propagate(0)
 		self.pack()
+		self.KK = Label(self, text='Test instructions:') #REPLACE WITH FUNCTION THAT PRINTS INSTRUCTIONS FOR EACH TEST
+		self.createWidgets()
+		self.master.iconname("tkpython")
 
 		# Button 1
 		self.fw_button = tk.Button(self, text='FW Parsing Logs', command=run_fw_script)
@@ -101,25 +104,11 @@ class testapp(tk.Frame):
 		#self.submit.pack(fill=tk.X, side=tk.BOTTOM)
 
 
-	def run(self):
-		''' Run the app '''
-
-		self.mainloop()
-
-class NewMenuDemo(tk.Frame):
-	def __init__(self, parent=None):
-		Frame.__init__(self, parent)
-		self.L = Label(self, text='Test instructions:') #REPLACE WITH FUNCTION THAT PRINTS INSTRUCTIONS FOR EACH TEST
-		#self.pack(expand=YES, fill=BOTH, side=tk.BOTTOM )
-		self.createWidgets()
-		#self.master.title("Striiv QA Tester")
-		self.master.iconname("tkpython")
-
 	def createWidgets(self):
 		self.makeMenuBar()
 		self.makeToolBar()
-		self.L.config(relief=SUNKEN, width=40, height=10, bg='white')
-		self.L.pack(expand=YES, fill=BOTH)
+		self.KK.config(relief=SUNKEN, width=40, height=10, bg='white')
+		self.KK.pack(expand=YES, fill=BOTH)
 
 	def makeToolBar(self):
 		toolbar = Frame(self, cursor='hand2', relief=SUNKEN, bd=2)
@@ -154,11 +143,28 @@ class NewMenuDemo(tk.Frame):
 						  '\nBeta ver.1     AUG2016')
 	def notdone(self):
 		showerror('Not implemented', 'Not yet available')
+
 	def quit(self):
 		if askyesno('Verify quit', 'Are you sure you want to quit?'):
 			Frame.quit(self)
 
+	def run(self):
+		''' Run the app '''
+
+		self.mainloop()
+
+class NewMenuDemo(tk.Frame):
+	def __init__(self, parent=None):
+		Frame.__init__(self, parent)
+		self.L = Label(self, text='Test instructions:') #REPLACE WITH FUNCTION THAT PRINTS INSTRUCTIONS FOR EACH TEST
+		#self.pack(expand=YES, fill=BOTH, side=tk.BOTTOM )
+		self.createWidgets()
+		#self.master.title("Striiv QA Tester")
+		self.master.iconname("tkpython")
+
+
+
 if __name__=='__main__':
 	app = testapp()
-	#app.run()
-	NewMenuDemo().mainloop()  # if I'm run as a script
+	app.run()
+	#NewMenuDemo().mainloop()  # if I'm run as a script
