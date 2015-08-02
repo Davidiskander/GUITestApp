@@ -3,6 +3,8 @@ import Tkinter as tk
 import os
 import glob
 from Tkinter import *
+from tkMessageBox import *
+
 
 def run_fw_script():
 
@@ -122,7 +124,7 @@ class testapp(tk.Frame):
 
 	def editMenu(self):
 		pulldown = Menu(self.menubar)
-		pulldown.add_command(label='Paste',   command=self.notdone)
+		pulldown.add_command(label='Read me!',   command=self.notdone)
 		pulldown.add_command(label='About!',    command=self.greeting)
 		pulldown.add_separator()
 		pulldown.add_command(label='Delete',  command=self.greeting)
