@@ -68,13 +68,14 @@ class testapp(tk.Frame):
 
 	# Frame creation
 	def __init__(self):
-		tk.Frame.__init__(self, master=None, width=500,height=600)
+		tk.Frame.__init__(self, master=None, width=500,height=500)
 		self.master.title('Stiiv QA Tester \"Demo\" ')
 		self.pack_propagate(0)
 		self.pack()
+		self.userentry = DoubleVar()
 
 		# Button 1
-		self.fw_button = tk.Button(self, text='FW Parsing Logs', command=run_fw_script)
+		self.fw_button = tk.Button(self, text='FW Parsing Logs', command=self.gotofw)
 		self.fw_button.pack(fill=tk.X, side=tk.TOP)
 
 		# Button 2
@@ -85,27 +86,31 @@ class testapp(tk.Frame):
 		self.sb_button = tk.Button(self, text='Connectivity Sheild Test', command=sheildbox_test)
 		self.sb_button.pack(fill=tk.X, side=tk.TOP)
 
+		#Submit button
+		self.submit_button = tk.Button(self, text="Submit", command=self.on_button)
+		self.submit_button.pack(fill=tk.X, side=tk.BOTTOM)
+
 		# Entry
-		self.entry = tk.Entry(self)
-		self.button = tk.Button(self, text="Submit", command=self.on_button)
-		self.button.pack(fill=tk.X, side=tk.BOTTOM)
+		self.entry = tk.Entry(self, textvariable=self.userentry)
+		self.entry.bind=('<Return>',self.on_button)
 		self.entry.pack(fill=tk.X, side=tk.BOTTOM)
 
-		#Bottom Bar: about & quit
-		self.KK = Label(self, text='Test instructions:') #REPLACE WITH FUNCTION THAT PRINTS INSTRUCTIONS FOR EACH TEST
-		self.createWidgets()
+		# write some useful instructions here
+		self.KK = Label(self, text='Test instructions:', fg='green') #REPLACE WITH FUNCTION THAT PRINTS INSTRUCTIONS FOR EACH TEST
+		self.KK.config(relief=FLAT, width=40, height=10, bg='white')
+		self.KK.pack(expand=YES, fill=BOTH)
+		self.createwidgets()
 
 	def on_button(self):
 		print(self.entry.get())
 
-	def createWidgets(self):
+	def createwidgets(self):
 		self.makeMenuBar()
 		self.makeToolBar()
-		self.KK.config(relief=SUNKEN, width=40, height=10, bg='white')
-		self.KK.pack(expand=YES, fill=BOTH)
+
 
 	def makeToolBar(self):
-		toolbar = Frame(self, cursor='hand2', relief=SUNKEN, bd=2)
+		toolbar = Frame(self, cursor='hand2', relief=FLAT, bd=2)
 		toolbar.pack(side=BOTTOM, fill=X)
 		Button(toolbar, text='Quit',  command=self.quit    ).pack(side=RIGHT)
 		Button(toolbar, text='About', command=self.greeting).pack(side=LEFT)
@@ -141,13 +146,38 @@ class testapp(tk.Frame):
 		if askyesno('Verify quit', 'Are you sure you want to quit?'):
 			Frame.quit(self)
 
+	def gotofw(self):
+		root2 = Toplevel(self)
+		win1 = FWwindow(root2)
+
 	def run(self):
 		''' Run the app '''
 
 		self.mainloop()
 
+class FWwindow ():
+	def __init__(self,master):
+		self.devices = DoubleVar()
+		self.path = DoubleVar()
+		self.master = master
+		self.master.geometry ("500x400+300+300")
+		self.master.title('FW PARSING LOGS TEST')
+
+		# Entry
+		self.entry1 = Entry(self.master, fg='blue', textvariable=self.devices).grid(row=1, column=3)
+		self.entry2 = Entry(self.master, fg='blue', textvariable=self.path).grid(row=3, column=3)
+
+		# Labels
+		self.FWL1 = Label(self.master, text='Input devices IDs here:', fg='blue').grid(row=1, column=1)
+		self.FWL2 = Label(self.master, text='Input directory path here:', fg='blue').grid(row=3, column=1)
+
+		# Button
+		self.start_button = Button(self.master, text='Start Parsing Logs Now', command=run_sw_script).grid(row=5, column=2)
+		self.back_button = Button(self.master, text='Back', command=self.back).grid(row=7, column=2)
+
+	def back(self):
+		self.master.destroy()
 
 if __name__=='__main__':
 	app = testapp()
 	app.run()
-	#NewMenuDemo().mainloop()  # if I'm run as a script
