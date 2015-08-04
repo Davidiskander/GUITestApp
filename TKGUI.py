@@ -72,32 +72,41 @@ class testapp(tk.Frame):
 		self.master.title('Stiiv QA Tester \"Demo\" ')
 		self.pack_propagate(0)
 		self.pack()
-		self.userentry = DoubleVar()
+		#self.userentry = DoubleVar()
+
+
+		self.photo = PhotoImage(file="icon.gif")
+		self.w = Label(self, image=self.photo)
+		self.w.photo = self.photo
+		self.w.pack()
 
 		# Button 1
-		self.fw_button = tk.Button(self, text='FW Parsing Logs', command=self.gotofw)
+		self.fw_button = tk.Button(self, text='FW Parsing Logs', command=self.gotofw, font=("Helvetica", 14))
+		self.fw_button.config(relief=FLAT, height=2)
 		self.fw_button.pack(fill=tk.X, side=tk.TOP)
 
 		# Button 2
-		self.sw_button = tk.Button(self, text='SW Parsing Logs', command=run_sw_script)
+		self.sw_button = tk.Button(self, text='SW Parsing Logs', command=self.gotosw, font=("Helvetica", 14))
+		self.sw_button.config(relief=FLAT, height=2)
 		self.sw_button.pack(fill=tk.X, side=tk.TOP)
 
 		# Button 3
-		self.sb_button = tk.Button(self, text='Connectivity Sheild Test', command=sheildbox_test)
+		self.sb_button = tk.Button(self, text='Connectivity Sheild Test', command=self.gotosbtest, font=("Helvetica", 14))
+		self.sb_button.config(relief=FLAT, height=2)
 		self.sb_button.pack(fill=tk.X, side=tk.TOP)
 
 		#Submit button
-		self.submit_button = tk.Button(self, text="Submit", command=self.on_button)
-		self.submit_button.pack(fill=tk.X, side=tk.BOTTOM)
+		#self.submit_button = tk.Button(self, text="Submit", command=self.on_button)
+		#self.submit_button.pack(fill=tk.X, side=tk.BOTTOM)
 
 		# Entry
-		self.entry = tk.Entry(self, textvariable=self.userentry)
-		self.entry.bind=('<Return>',self.on_button)
-		self.entry.pack(fill=tk.X, side=tk.BOTTOM)
+		#self.entry = tk.Entry(self, textvariable=self.userentry)
+		#self.entry.bind=('<Return>',self.on_button)
+		#self.entry.pack(fill=tk.X, side=tk.BOTTOM)
 
 		# write some useful instructions here
-		self.KK = Label(self, text='Test instructions:', fg='green') #REPLACE WITH FUNCTION THAT PRINTS INSTRUCTIONS FOR EACH TEST
-		self.KK.config(relief=FLAT, width=40, height=10, bg='white')
+		self.KK = Label(self, text='Under Construction!', fg='green') #REPLACE WITH FUNCTION THAT PRINTS INSTRUCTIONS FOR EACH TEST
+		#self.KK.config(relief=FLAT, width=40, height=10, bg='white')
 		self.KK.pack(expand=YES, fill=BOTH)
 		self.createwidgets()
 
@@ -150,6 +159,14 @@ class testapp(tk.Frame):
 		root2 = Toplevel(self)
 		win1 = FWwindow(root2)
 
+	def gotosw(self):
+		root3 = Toplevel(self)
+		win2 = SWwindow(root3)
+
+	def gotosbtest(self):
+		root4 = Toplevel(self)
+		win3 = SBoxwindow(root4)
+
 	def run(self):
 		''' Run the app '''
 
@@ -160,11 +177,12 @@ class FWwindow ():
 		self.devices = DoubleVar()
 		self.path = DoubleVar()
 		self.master = master
-		self.master.geometry ("500x400+300+300")
-		self.master.title('FW PARSING LOGS TEST')
+		self.master.geometry ("500x200+300+300")
+		self.master.title('FIRMWARE PARSING LOGS TEST')
+
 
 		# Entry
-		self.entry1 = Entry(self.master, fg='blue', textvariable=self.devices).grid(row=1, column=3)
+		self.entry1 = Entry(self.master, fg='blue', textvariable=run_fw_script).grid(row=1, column=3)
 		self.entry2 = Entry(self.master, fg='blue', textvariable=self.path).grid(row=3, column=3)
 
 		# Labels
@@ -172,11 +190,66 @@ class FWwindow ():
 		self.FWL2 = Label(self.master, text='Input directory path here:', fg='blue').grid(row=3, column=1)
 
 		# Button
-		self.start_button = Button(self.master, text='Start Parsing Logs Now', command=run_sw_script).grid(row=5, column=2)
-		self.back_button = Button(self.master, text='Back', command=self.back).grid(row=7, column=2)
+		self.start_button = Button(self.master, text='Start Parsing Logs Now', command=run_fw_script).grid(row=5, column=2)
+		self.extract_button = Button(self.master, text='Extract Result!', command=self.nodone).grid(row=6, column=2)
+		self.back_button = Button(self.master, text='Back', command=self.back).grid(row=9, column=3)
 
 	def back(self):
 		self.master.destroy()
+
+	def nodone(self):
+		self.master.showerror('Not implemented', 'Not yet available')
+
+class SWwindow ():
+	def __init__(self,master):
+		self.sw_path = DoubleVar()
+		self.master = master
+		self.master.geometry ("500x200+300+300")
+		self.master.title('SOFTWARE PARSING LOGS TEST')
+
+
+		# Entry
+		self.swentry = Entry(self.master, fg='blue', textvariable=self.sw_path).grid(row=1, column=3)
+
+		# Labels
+		self.swpath = Label(self.master, text='Input directory path here:', fg='blue').grid(row=1, column=1)
+
+		# Button
+		self.start_button = Button(self.master, text='Start Parsing Logs Now', command=run_sw_script).grid(row=5, column=2)
+		self.extract_button = Button(self.master, text='Extract Result!', command=self.nodone).grid(row=6, column=2)
+		self.back_button = Button(self.master, text='Back', command=self.back).grid(row=7, column=4)
+
+	def back(self):
+		self.master.destroy()
+
+	def nodone(self):
+		self.master.showerror('Not implemented', 'Not yet available')
+
+class SBoxwindow ():
+	def __init__(self,master):
+		self.devices = DoubleVar()
+		self.timeinterval = DoubleVar()
+		self.master = master
+		self.master.geometry ("500x200+300+300")
+		self.master.title('AUTOMATIC SHIELD-BOX CONNECTIVITY TEST')
+
+
+		# Entry
+		self.entry1 = Entry(self.master, fg='blue', textvariable=self.timeinterval).grid(row=1, column=3)
+
+		# Labels
+		self.FWL1 = Label(self.master, text='Input time intervals in minutes:', fg='blue').grid(row=1, column=1)
+
+		# Button
+		self.start_button = Button(self.master, text='RUN TEST', command=sheildbox_test).grid(row=5, column=2)
+		self.extract_button = Button(self.master, text='STOP!', command=self.nodone).grid(row=6, column=2)
+		self.back_button = Button(self.master, text='Back', command=self.back).grid(row=7, column=3)
+
+	def back(self):
+		self.master.destroy()
+
+	def nodone(self):
+		self.master.showerror('Not implemented', 'Not yet available')
 
 if __name__=='__main__':
 	app = testapp()

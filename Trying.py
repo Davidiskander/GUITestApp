@@ -1,28 +1,19 @@
-from Tkinter import Tk, Frame, BOTH
+import Tkinter as tk
 
+class Test(tk.Frame):
+	def __init__(self):
 
-class Example(Frame):
-  
-    def __init__(self, parent):
-        Frame.__init__(self, parent, background="white")   
-         
-        self.parent = parent
-        
-        self.initUI()
-    
-    def initUI(self):
-      
-        self.parent.title("Simple")
-        self.pack(fill=BOTH, expand=1)
-        
+		canvas = tk.Canvas()
+		canvas.grid(row=0, column=0)
 
-def main():
-  
-    root = Tk()
-    root.geometry("500x150+300+300")
-    app = Example(root)
-    root.mainloop()  
+		self.photo = tk.PhotoImage(file='./icon.gif')
 
+		canvas.create_image(0,0, image=self.photo)
 
-if __name__ == '__main__':
-    main()  
+	def run(self):
+
+		self.mainloop()
+if __name__=='__main__':
+
+	test = Test()
+	Test.run()
