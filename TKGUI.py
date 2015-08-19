@@ -1,6 +1,5 @@
 __author__ = 'davidiskander'
 import Tkinter as tk
-import os
 import glob
 from Tkinter import *
 from tkMessageBox import *
@@ -8,22 +7,18 @@ import serial
 import sys
 import time
 import os
-from tkFileDialog import askopenfilename
+from tkFileDialog import askdirectory
 
 content = ''
-file_path = ''
+path = ''
 
 def open_file():
 	global content
-	global file_path
+	global path
 
-	filename = askopenfilename()
-	infile = open(filename, 'r')
-	content = infile.read()
-	file_path = os.path.dirname(filename)
+	path = askdirectory()
 	entry.delete(0, END)
-	entry.insert(0, file_path)
-	return content
+	entry.insert(0, path)
 
 def process_file(content):
 	print content
@@ -33,7 +28,7 @@ class testapp(tk.Frame):
 	# Frame creation
 	def __init__(self):
 		tk.Frame.__init__(self, master=None, width=500,height=500)
-		self.master.title('Stiiv GUI Tester ')
+		self.master.title('Striiv GUI Tester ')
 		self.pack_propagate(0)
 		self.pack()
 		#self.userentry = DoubleVar()
@@ -157,21 +152,21 @@ class Window():
 		self.master.geometry ("500x200+300+300")
 		self.master.title = t
 
-		self.devices = DoubleVar()
+		self.devices = DoubleVar
 		self.devices = []
 		self.time_interval = DoubleVar()
-		self.file_path = StringVar
+		self.path = StringVar
 
 		if w == 'firmware':
+
 			# Devices
 			self.FWL1 = Label(self.master, text='Input devices IDs here:', fg='blue').grid(row=1, column=1)
 			self.entry1 = Entry(self.master, fg='blue', textvariable=self.devices).grid(row=1, column=3)
 
 			# Path
 			self.Label1 = Label(self.master,fg='blue',text="Select Your File").grid(row=2, column=1)
-			self.entry = Entry(self.master, textvariable=self.file_path).grid(row=2, column=2)
+			self.entry = Entry(self.master, textvariable=self.path).grid(row=2, column=2)
 			self.b1=Button(self.master, text='Browse', command=open_file).grid(row=2, column=3)
-			self.b2=Button(self.master, text="Process Now", command=lambda: process_file).grid(row=5, column=2)
 
 			#  Run and get results
 			self.start_button = Button(self.master, text='Start Test', command=self.run_fw_script).grid(row=7, column=2)
@@ -205,22 +200,16 @@ class Window():
 			self.back_button = Button(self.master, text='Back', command=self.back).grid(row=9, column=3)
 
 	def run_fw_script(self):
-
-		notif_id = 0
-		#device_id= ['*_H3C88AED8BABDC0F34DC_*.txt', '*_H33B116C5459404C247A_*.txt']
-		device_id= [self.devices]
-
-		#print (self.entry2.get())
-		#print "/Users/davidiskander/Desktop/Parse/5"
-		#self.path = raw_input('what\'s the logs directory ?\n')
+		device_id= ['*_H3C88AED8BABDC0F34DC_*.txt','*_H8DFA9C8C8902F57131A_*.txt', '*_H33B116C5459404C247A_*.txt', '*_H8183A6FCCA70B8193BC_*.txt']
 
 		for id in device_id:
-			print "Device: %s" % id
-			for txtfile in glob.glob(os.path.join(file_path, id) ):
-				with open(txtfile, 'rU') as f:
-					lines = f.readlines()
+			print "\nDevice: %s" % id
 
-					for line in lines:
+			for txtfile in glob.glob(os.path.join(path, id)):
+				with open(txtfile, 'rU') as f:
+
+					content = f.readlines()
+					for line in content:
 
 						if ("NOTIF:alloc/id:" in line):
 							print "\n|Notification ID: %s\t|Arrived at: %s\t|" %(line [-10:-1] , line[:20]),

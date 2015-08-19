@@ -91,8 +91,7 @@ def run_script():
 
 	for id in device_id:
 		print "Device: %s" % id
-		print " Ready to parse files for Device %s, hit RETURN" %id
-		raw_input()
+
 		for txtfile in glob.glob(os.path.join(path, id) ):
 			with open(txtfile, 'rU') as f:
 				lines = f.readlines()
