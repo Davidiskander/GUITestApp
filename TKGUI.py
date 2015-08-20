@@ -12,17 +12,6 @@ from tkFileDialog import askdirectory
 content = ''
 path = ''
 
-def open_file():
-	global content
-	global path
-
-	path = askdirectory()
-	entry.delete(0, END)
-	entry.insert(0, path)
-
-def process_file(content):
-	print content
-
 class testapp(tk.Frame):
 
 	# Frame creation
@@ -149,44 +138,41 @@ class testapp(tk.Frame):
 class Window():
 	def __init__(self,master, t, w):
 		self.master = master
-		self.master.geometry ("500x200+300+300")
+		self.master.geometry ("400x150+500+500")
 		self.master.title = t
 
-		self.devices = DoubleVar
-		self.devices = []
+		#self.devices = DoubleVar
+		#self.devices = []
 		self.time_interval = DoubleVar()
-		self.path = StringVar
+		path = StringVar
 
 		if w == 'firmware':
 
-			# Devices
-			self.FWL1 = Label(self.master, text='Input devices IDs here:', fg='blue').grid(row=1, column=1)
-			self.entry1 = Entry(self.master, fg='blue', textvariable=self.devices).grid(row=1, column=3)
-
 			# Path
-			self.Label1 = Label(self.master,fg='blue',text="Select Your File").grid(row=2, column=1)
-			self.entry = Entry(self.master, textvariable=self.path).grid(row=2, column=2)
-			self.b1=Button(self.master, text='Browse', command=open_file).grid(row=2, column=3)
+			self.Label1 = Label(self.master,fg='blue',text="Select Your File").grid(row=0, column=1, sticky='e')
+			self.entry = Entry(self.master, textvariable=path)
+			self.entry.grid(row=0,column=2,sticky='we',columnspan=5)
+			self.entry.focus_set()
+			self.b1=Button(self.master, text='Browse', command=self.open_file).grid(row=0, column=7, sticky='ew', padx=8, pady=4)
 
 			#  Run and get results
-			self.start_button = Button(self.master, text='Start Test', command=self.run_fw_script).grid(row=7, column=2)
-			self.extract_button = Button(self.master, text='Extract Result!', command=self.notdone).grid(row=8, column=2)
-			self.back_button = Button(self.master, text='Back', command=self.back).grid(row=9, column=3)
-
-			#self.entry2.bind('<B1-Motion>',self.run_fw_script)
+			self.start_button = Button(self.master, text='Start Test', command=self.run_fw_script).grid(row=3, column=1)
+			self.extract_button = Button(self.master, text='Extract Result!', command=self.not_done).grid(row=3, column=2)
+			self.back_button = Button(self.master, text='Back', command=self.back).grid(row=3, column=5)
 
 
 		elif w == 'software':
 			# Path
-			self.Label1 = Label(self.master,fg='blue',text="Select Your File").grid(row=2, column=1)
-			self.entry = Entry(self.master, textvariable=self.file_path).grid(row=2, column=2)
-			self.b1=Button(self.master, text='Browse', command=open_file).grid(row=2, column=3)
-			self.b2=Button(self.master, text="Process Now", command=lambda: process_file).grid(row=5, column=2)
+			self.Label1 = Label(self.master,fg='blue',text="Select Your File").grid(row=0, column=1, sticky='e')
+			self.entry = Entry(self.master, textvariable=path)
+			self.entry.grid(row=0,column=2,sticky='we',columnspan=5)
+			self.entry.focus_set()
+			self.b1=Button(self.master, text='Browse', command=self.open_file).grid(row=0, column=27, sticky='ew', padx=8, pady=4)
 
 			#  Run and get results
-			self.start_button = Button(self.master, text='Start Test', command=self.run_fw_script).grid(row=7, column=2)
-			self.extract_button = Button(self.master, text='Extract Result!', command=self.notdone).grid(row=8, column=2)
-			self.back_button = Button(self.master, text='Back', command=self.back).grid(row=9, column=3)
+			self.start_button = Button(self.master, text='Start Test', command=self.run_sw_script).grid(row=3, column=1)
+			self.extract_button = Button(self.master, text='Extract Result!', command=self.not_done).grid(row=3, column=2)
+			self.back_button = Button(self.master, text='Back', command=self.back).grid(row=3, column=5)
 
 
 		elif w == 'connectivity':
@@ -196,7 +182,7 @@ class Window():
 
 			# Button
 			self.start_button = Button(self.master, text='Start Test', command=self.sheildbox_test).grid(row=5, column=2)
-			self.extract_button = Button(self.master, text='Extract Result!', command=self.notdone).grid(row=6, column=2)
+			self.extract_button = Button(self.master, text='Extract Result!', command=self.not_done).grid(row=6, column=2)
 			self.back_button = Button(self.master, text='Back', command=self.back).grid(row=9, column=3)
 
 	def run_fw_script(self):
@@ -291,9 +277,15 @@ class Window():
 	def back(self):
 		self.master.destroy()
 
-	def notdone(self):
-		self.master.showerror('Not implemented', 'Not yet available')
+	def not_done(self):
+		self.showerror('Not implemented', 'Not yet available')
 
+	def open_file(self):
+		global content
+		global path
+		path = askdirectory()
+		self.entry.delete(0, END)
+		self.entry.insert(0, path)
 
 
 

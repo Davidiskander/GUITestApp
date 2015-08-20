@@ -19,6 +19,7 @@ def open_file():
 def script():
 	device_id= ['*_H3C88AED8BABDC0F34DC_*.txt','*_H8DFA9C8C8902F57131A_*.txt', '*_H33B116C5459404C247A_*.txt', '*_H8183A6FCCA70B8193BC_*.txt']
 
+	print "ID: %s" % device_id
 	for id in device_id:
 		print "\nDevice: %s" % id
 
@@ -34,7 +35,7 @@ def script():
 						print "Type: Meeting\t| Preparing! \t | Info: %s\t|" %line[-9:-1],
 					if ("+1 (408) 606-2975" in line):
 						print "Type: SMS \t| Preparing! \t|",
-					elif ('NOTIF:post:/id' in line):
+					elif ('post:/id' in line):
 						print "Sent \t|",
 					elif ('err_code:3' in line):
 						print "Fail; error_3",
@@ -61,11 +62,19 @@ f2.pack()
 
 path = StringVar
 
+
 Label(f1,text="Select Your File").grid(row=0, column=0, sticky='e')
+Label(f1,text="Input your device IDs").grid(row=2, column=0, sticky='e')
+
 entry = Entry(f1, width=50, textvariable=path)
 entry.grid(row=0,column=1,padx=2,pady=2,sticky='we',columnspan=25)
-Button(f1, text="Browse", command=open_file).grid(row=0, column=27, sticky='ew', padx=8, pady=4)
-Button(f2, text="Process Now", width=32, command=script).grid(sticky='ew', padx=10, pady=10)
+entry.focus_set()
+
+entry2 = Entry(f1, width=50, textvariable=id)
+entry2.grid(row=2,column=1,padx=2,pady=2,sticky='we',columnspan=3)
+
+Button(f1, text="Browse", command=open_file).grid(row=0, column=8, sticky='ew', padx=8, pady=4)
+Button(f2, text="Process Now", width=32, command=script).grid(sticky='ew', padx=10, pady=20)
 
 
 root.mainloop()
