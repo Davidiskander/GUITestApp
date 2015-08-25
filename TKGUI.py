@@ -8,9 +8,13 @@ import sys
 import time
 import os
 from tkFileDialog import askdirectory
+import time
 
 content = ''
 path = ''
+newfile = ''
+counter_open = ''
+counter_close = ''
 
 class testapp(tk.Frame):
 
@@ -64,18 +68,6 @@ class testapp(tk.Frame):
 		self.sb_button.pack_propagate(0)
 		self.sb_button.pack()
 
-		#self.f = tk.Label(self, text='Windows Platform Tests')#.place(relx=.06, rely=0.125,anchor=W)
-		#self.f.pack(fill=tk.X)
-
-		#Submit button
-		#self.submit_button = tk.Button(self, text="Submit", command=self.on_button)
-		#self.submit_button.pack(fill=tk.X, side=tk.BOTTOM)
-
-		# Entry
-		#self.entry = tk.Entry(self, textvariable=self.userentry)
-		#self.entry.bind=('<Return>',self.on_button)
-		#self.entry.pack(fill=tk.X, side=tk.BOTTOM)
-
 
 		self.createwidgets()
 
@@ -124,7 +116,7 @@ class testapp(tk.Frame):
 			Frame.quit(self)
 
 	def gotofw(self):
-		win = Window(Toplevel(self), 'FW Test', 'firmware' )
+		win = Window(Toplevel(self), 'FW Test', 'firmware')
 
 	def gotosw(self):
 		win = Window(Toplevel(self), 'SW TEST', 'software')
@@ -138,92 +130,148 @@ class testapp(tk.Frame):
 class Window():
 	def __init__(self,master, t, w):
 		self.master = master
-		self.master.geometry ("400x150+500+500")
+		self.master.geometry ("480x300+500+50")
 		self.master.title = t
 
-		#self.devices = DoubleVar
-		#self.devices = []
-		self.time_interval = DoubleVar()
 		path = StringVar
+		counter_open = StringVar
+
+
 
 		if w == 'firmware':
 
 			# Path
-			self.Label1 = Label(self.master,fg='blue',text="Select Your File").grid(row=0, column=1, sticky='e')
-			self.entry = Entry(self.master, textvariable=path)
-			self.entry.grid(row=0,column=2,sticky='we',columnspan=5)
+			self.Title = Label(self.master,text="Firmware, Single Char. Parsing Logs - Notifications", font=('Verdana', 13, 'bold')).pack(side=TOP)
+			self.Instruction_label = Label(self.master,fg='Red',text="HEY!! Before you start this test please download all the files\n"
+																	  " that you need to parse and put them into a folder").pack(side=TOP)
+			self.Label1 = Label(self.master,text="Select Your Folder").pack(side=TOP)
+			self.entry = Entry(self.master, width=50, textvariable=path)
+			self.entry.pack(side=TOP)
 			self.entry.focus_set()
-			self.b1=Button(self.master, text='Browse', command=self.open_file).grid(row=0, column=7, sticky='ew', padx=8, pady=4)
+			self.b1=Button(self.master, text='Browse', command=self.open_file).pack(side=TOP)
 
 			#  Run and get results
-			self.start_button = Button(self.master, text='Start Test', command=self.run_fw_script).grid(row=3, column=1)
-			self.extract_button = Button(self.master, text='Extract Result!', command=self.not_done).grid(row=3, column=2)
-			self.back_button = Button(self.master, text='Back', command=self.back).grid(row=3, column=5)
-
+			self.back_button = Button(self.master, text='Done', command=self.back).pack(side=BOTTOM, fill=X)
+			self.start_button = Button(self.master, bg='green', text='Run test & save results to a txt file', command=self.run_fw_script).pack(side=BOTTOM, padx = 20, pady=10)
 
 		elif w == 'software':
 			# Path
-			self.Label1 = Label(self.master,fg='blue',text="Select Your File").grid(row=0, column=1, sticky='e')
-			self.entry = Entry(self.master, textvariable=path)
-			self.entry.grid(row=0,column=2,sticky='we',columnspan=5)
+			self.Title = Label(self.master,text="Windows App Parsing Logs - Notifications", font=('Verdana', 13, 'bold')).pack(side=TOP)
+			self.Instruction_label = Label(self.master,fg='Red',text="HEY!! Before you start this test please download all the files\n"
+																	  " that you need to parse and put them into a folder").pack(side=TOP)
+			self.Label1 = Label(self.master,text="Select Your Folder").pack(side=TOP)
+			self.entry = Entry(self.master, width=50, textvariable='path')
+			self.entry.pack(side=TOP)
 			self.entry.focus_set()
-			self.b1=Button(self.master, text='Browse', command=self.open_file).grid(row=0, column=27, sticky='ew', padx=8, pady=4)
+			self.b1=Button(self.master, text='Browse', command=self.open_file).pack(side=TOP)
 
 			#  Run and get results
-			self.start_button = Button(self.master, text='Start Test', command=self.run_sw_script).grid(row=3, column=1)
-			self.extract_button = Button(self.master, text='Extract Result!', command=self.not_done).grid(row=3, column=2)
-			self.back_button = Button(self.master, text='Back', command=self.back).grid(row=3, column=5)
+			self.back_button = Button(self.master, text='Done', command=self.back).pack(side=BOTTOM, fill=X)
+			self.start_button = Button(self.master, bg='green', text='Run test & save results to a txt file', command=self.run_sw_script).pack(side=BOTTOM, padx = 20, pady=10)
 
 
 		elif w == 'connectivity':
+			# Head
+			self.Title = Label(self.master,text="Automatic Shield box Test", font=('Verdana', 13, 'bold')).pack(side=TOP)
+			self.Instruction_label = Label(self.master,fg='Red',text="This is used to input the time intervals for the box to open and close\n"
+																	  " Make sure that the compressor and the box are connected and secured safely").pack(side=TOP)
 			# Time Interval
-			self.entry1 = Entry(self.master, fg='blue', textvariable=self.time_interval).grid(row=1, column=3)
-			self.FWL1 = Label(self.master, text='Input time intervals in minutes:', fg='blue').grid(row=1, column=1)
+			self.FWL1 = Label(self.master, text='Input time intervals in minutes:').pack()
+			self.entry1 = Entry(self.master).pack()
+			self.entry2 = Entry(self.master).pack()
+			self.entry3 = Entry(self.master).pack()
 
-			# Button
-			self.start_button = Button(self.master, text='Start Test', command=self.sheildbox_test).grid(row=5, column=2)
-			self.extract_button = Button(self.master, text='Extract Result!', command=self.not_done).grid(row=6, column=2)
-			self.back_button = Button(self.master, text='Back', command=self.back).grid(row=9, column=3)
+			# Run and get results
+			self.back_button = Button(self.master, text='Done', command=self.back).pack(side=BOTTOM, fill=X)
+
+			self.counter1 = Label(self.master, fg="dark green")
+			#self.counter1.config(text='Box opened: ' + counter_open)
+			self.counter1.pack(side=BOTTOM)
+
+			#self.Counter_Close = Label(self.master, fg="dark green", command=counter_close).pack(side=BOTTOM)
+			self.Stop_Button = tk.Button(self.master, text='Stop', width=25, command=self.back).pack(side=BOTTOM)
+			self.start_button = Button(self.master, text='Start', width=25, command=self.sheildbox_test).pack(side=BOTTOM)
 
 	def run_fw_script(self):
+		date_time = time.strftime(" %Y-%m-%d %H-%M-%S-%p")
+		print('Creating new text file')
+		name = 'FW Parsing Logs'+ date_time +'.txt'
+
+		try:
+			newfile = open(name, 'w')
+			print ('Created the file')
+
+		except:
+			print('Something went wrong! Can\'t tell what?')
+			sys.exit(0)
+
 		device_id= ['*_H3C88AED8BABDC0F34DC_*.txt','*_H8DFA9C8C8902F57131A_*.txt', '*_H33B116C5459404C247A_*.txt', '*_H8183A6FCCA70B8193BC_*.txt']
-
+		print('Reading Devices IDs')
+		newfile.write('Starting FW parsing Logs')
 		for id in device_id:
-			print "\nDevice: %s" % id
-
+			print('Parsing Logs ...')
+			newfile.write('\n\nDevice:' + id)
 			for txtfile in glob.glob(os.path.join(path, id)):
 				with open(txtfile, 'rU') as f:
-
 					content = f.readlines()
 					for line in content:
 
 						if ("NOTIF:alloc/id:" in line):
-							print "\n|Notification ID: %s\t|Arrived at: %s\t|" %(line [-10:-1] , line[:20]),
+							a = "\n|Notification ID: %s" %line [-10:-1]
+							aa = "|Arrived at: %s\t|" %line[:20]
+							newfile.write(str(a) + "\t" + str(aa))
+
 						if ('NOTIF:attrec:Test' in line):
-							print "Type: Meeting\t| Preparing! \t | Info: %s\t|" %line[-9:-1],
+							b = "Type: Meeting"
+							bb = "| Preparing!"
+							bbb = "| Info: %s" %line[-9:-1]
+							newfile.write(str(b) + "\t" + str(bb) + "\t" + str(bbb))
+
 						if ("+1 (408) 606-2975" in line):
-							print "Type: SMS \t| Preparing! \t|",
-						elif ('NOTIF:post:/id' in line):
-							print "Sent \t|",
+							c = "Type: SMS"
+							cc = "| Preparing!"
+							newfile.write(str(c) + "\t" + str(cc))
+
+						elif ("NOTIF:post:/id" in line):
+							d = "|Sent"
+							newfile.write(str(d) + "\t")
+
 						elif ('err_code:3' in line):
-							print "Fail; error_3",
+							e = "|Fail; error_3"
+							newfile.write(str(e))
+
 						elif ('err_code:4' in line):
-							print "Fail; error #4",
+							f = "|Fail; error #4"
+							newfile.write(str(f))
+
 						elif ('err_code:5' in line or  'err_code:7' in line):
-							print "Fail; error #5&7",
+							g = "|Fail; error #5&7"
+							newfile.write(str(g))
 
 
-			print "\n"
+			newfile.write('\n')
+		print('Finished Parsing Logs')
+		newfile.close()
+		print('Closing the file')
+
 
 	def run_sw_script(self):
+		date_time = time.strftime(" %Y-%m-%d %H-%M-%S-%p")
+		print('Creating new text file')
+		name = 'WinApp Parsing Logs'+ date_time +'.txt'
+
+		try:
+			newfile = open(name, 'w')
+			print ('Created the file')
+
+		except:
+			print('Something went wrong! Can\'t tell what?')
+			sys.exit(0)
+
 		a = []
 		b = []
 
-
-		print "\n\n What is the file name?"
-		z = raw_input(">")
-
-		with open(z,'rU') as x:
+		with open(path,'rU') as x:
 			lines = x.readlines()
 			for line in lines:
 
@@ -231,14 +279,18 @@ class Window():
 					a.append (line [7:])
 				if ("send title:" in line):
 					b.append([line [7:]])
-			return (a,b)
+			newfile.write(str(a) + str(b))
+		newfile.close()
 
 	def sheildbox_test(self):
+		global counter_open
+		global counter_close
 		OPEN = "OPEN\f"
 		CLOSE = "CLOSE\f"
-		WAIT_TIME_S = 60
-		WAIT_TIME_M = 900
-		WAIT_TIME_L = 1800
+		WAIT_TIME_S = self.entry1.get()
+		WAIT_TIME_M = self.entry2.get()
+		WAIT_TIME_L = self.entry3.get()
+		print "Time intervals: %s, %s & %s" %(WAIT_TIME_S, WAIT_TIME_S, WAIT_TIME_S)
 
 		ser = ser = serial.Serial(port='/dev/cu.usbserial',
 								  baudrate=9600,
@@ -252,33 +304,37 @@ class Window():
 				print "Opening box"
 				print ser.write(OPEN)
 				time.sleep (WAIT_TIME_S)
+				counter_open += 1
 
 				print "Closing box"
 				print ser.write(CLOSE)
 				time.sleep (WAIT_TIME_M)
+				counter_close += 1
 
 				print "Opening box"
 				print ser.write(OPEN)
 				time.sleep (WAIT_TIME_M)
+				counter_open += 1
 
 				print "Closing box"
 				print ser.write(CLOSE)
 				time.sleep (WAIT_TIME_L)
+				counter_close += 1
 
 				print "Opening box"
 				print ser.write(OPEN)
 				time.sleep (WAIT_TIME_L)
+				counter_open += 1
 
 				print "Closing box"
 				print ser.write(CLOSE)
-				time.sleep (WAIT_TIME_S )
+				time.sleep (WAIT_TIME_S)
+				counter_close += 1
+
 		ser.close()
 
 	def back(self):
 		self.master.destroy()
-
-	def not_done(self):
-		self.showerror('Not implemented', 'Not yet available')
 
 	def open_file(self):
 		global content
@@ -286,9 +342,6 @@ class Window():
 		path = askdirectory()
 		self.entry.delete(0, END)
 		self.entry.insert(0, path)
-
-
-
 
 if __name__=='__main__':
 	app = testapp()
