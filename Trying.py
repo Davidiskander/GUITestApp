@@ -63,17 +63,17 @@ f2.pack()
 path = StringVar
 
 
-Label(f1,text="Select Your File").grid(row=0, column=0, sticky='e')
-Label(f1,text="Input your device IDs").grid(row=2, column=0, sticky='e')
+Label(f1,text="Select Your File").grid(row=2, column=0, sticky='e')
+Label(f1,text="Input your device IDs").grid(row=0, column=0, sticky='e')
 
 entry = Entry(f1, width=50, textvariable=path)
-entry.grid(row=0,column=1,padx=2,pady=2,sticky='we',columnspan=25)
+entry.grid(row=2,column=1,padx=2,pady=2,sticky='we',columnspan=20)
 entry.focus_set()
 
 entry2 = Entry(f1, width=50, textvariable=id)
-entry2.grid(row=2,column=1,padx=2,pady=2,sticky='we',columnspan=3)
+entry2.grid(row=0,column=1,padx=2,pady=2,sticky='we',columnspan=3)
 
-Button(f1, text="Browse", command=open_file).grid(row=0, column=8, sticky='ew', padx=8, pady=4)
+Button(f1, text="Browse", command=open_file).grid(row=2, column=8, sticky='ew', padx=8, pady=4)
 Button(f2, text="Process Now", width=32, command=script).grid(sticky='ew', padx=10, pady=20)
 
 

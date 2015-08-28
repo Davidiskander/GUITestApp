@@ -17,3 +17,9 @@ setup(
     options={'py2app': OPTIONS},
     setup_requires=['py2app'],
 )
+
+
+"""
+OPTIONS = {'iconfile':'icon.gif',
+    'plist': {'CFBundleShortVersionString':'0.1.0',}
+    """

@@ -5,7 +5,6 @@ from Tkinter import *
 from tkMessageBox import *
 import serial
 import sys
-import time
 import os
 from tkFileDialog import askdirectory
 import time
@@ -15,16 +14,18 @@ path = ''
 newfile = ''
 counter_open = ''
 counter_close = ''
+WAIT_TIME_S = ''
+WAIT_TIME_M = ''
+WAIT_TIME_L = ''
 
 class testapp(tk.Frame):
 
 	# Frame creation
 	def __init__(self):
 		tk.Frame.__init__(self, master=None, width=500,height=500)
-		self.master.title('Striiv GUI Tester ')
+		self.master.title ('Striiv GUI Tester')
 		self.pack_propagate(0)
 		self.pack()
-		#self.userentry = DoubleVar()
 
 		self.photo = PhotoImage(file="icon.gif")
 		self.w = Label(self, image=self.photo)
@@ -116,13 +117,13 @@ class testapp(tk.Frame):
 			Frame.quit(self)
 
 	def gotofw(self):
-		win = Window(Toplevel(self), 'FW Test', 'firmware')
+		win = Window(Toplevel(self), 'Firmware, Single Char. Parsing Logs - Notifications', 'firmware')
 
 	def gotosw(self):
-		win = Window(Toplevel(self), 'SW TEST', 'software')
+		win = Window(Toplevel(self), 'Windows App Parsing Logs - Notifications', 'software')
 
 	def gotosbtest(self):
-		win = Window(Toplevel(self), 'Shield-Box Test', 'connectivity')
+		win = Window(Toplevel(self), 'Automatic Shield box Test', 'connectivity')
 
 	def run(self):
 		self.mainloop()
@@ -130,20 +131,28 @@ class testapp(tk.Frame):
 class Window():
 	def __init__(self,master, t, w):
 		self.master = master
-		self.master.geometry ("480x300+500+50")
-		self.master.title = t
+		self.master.geometry ("480x330+500+50")
+		self.master.title (t)
 
 		path = StringVar
 		counter_open = StringVar
 
+		global WAIT_TIME_S
+		global WAIT_TIME_M
+		global WAIT_TIME_L
+
+		self.INST = LabelFrame(self.master, text='Instructions', width=420, height=100, fg='black', font=('Verdana', 14, 'bold', 'italic'))
+		self.INST.pack_propagate(0)
+		self.INST.pack(pady=10)
 
 
 		if w == 'firmware':
 
 			# Path
-			self.Title = Label(self.master,text="Firmware, Single Char. Parsing Logs - Notifications", font=('Verdana', 13, 'bold')).pack(side=TOP)
-			self.Instruction_label = Label(self.master,fg='Red',text="HEY!! Before you start this test please download all the files\n"
-																	  " that you need to parse and put them into a folder").pack(side=TOP)
+			self.Instruction_label = Label(self.INST,text="1- Using the test app, offload logs to parse\n"
+																	  " 2- Go to Parse, download files into a folder\n"
+																   "3- Use the browse function below to find the folder then run the test\n"
+																   "4- Find test report in the script directory folder ").pack(side=TOP)
 			self.Label1 = Label(self.master,text="Select Your Folder").pack(side=TOP)
 			self.entry = Entry(self.master, width=50, textvariable=path)
 			self.entry.pack(side=TOP)
@@ -156,9 +165,10 @@ class Window():
 
 		elif w == 'software':
 			# Path
-			self.Title = Label(self.master,text="Windows App Parsing Logs - Notifications", font=('Verdana', 13, 'bold')).pack(side=TOP)
-			self.Instruction_label = Label(self.master,fg='Red',text="HEY!! Before you start this test please download all the files\n"
-																	  " that you need to parse and put them into a folder").pack(side=TOP)
+			self.Instruction_label = Label(self.INST,text="1- Using the test app, offload logs to parse\n"
+																	  " 2- Go to Parse, download files into a folder\n"
+																   "3- Use the browse function below to find the folder then run the test\n"
+																   "4- Find test report in the script directory folder ").pack(side=TOP)
 			self.Label1 = Label(self.master,text="Select Your Folder").pack(side=TOP)
 			self.entry = Entry(self.master, width=50, textvariable='path')
 			self.entry.pack(side=TOP)
@@ -172,8 +182,7 @@ class Window():
 
 		elif w == 'connectivity':
 			# Head
-			self.Title = Label(self.master,text="Automatic Shield box Test", font=('Verdana', 13, 'bold')).pack(side=TOP)
-			self.Instruction_label = Label(self.master,fg='Red',text="This is used to input the time intervals for the box to open and close\n"
+			self.Instruction_label = Label(self.INST,fg='Red',text="This is used to input the time intervals for the box to open and close\n"
 																	  " Make sure that the compressor and the box are connected and secured safely").pack(side=TOP)
 			# Time Interval
 			self.FWL1 = Label(self.master, text='Input time intervals in minutes:').pack()
@@ -191,6 +200,9 @@ class Window():
 			#self.Counter_Close = Label(self.master, fg="dark green", command=counter_close).pack(side=BOTTOM)
 			self.Stop_Button = tk.Button(self.master, text='Stop', width=25, command=self.back).pack(side=BOTTOM)
 			self.start_button = Button(self.master, text='Start', width=25, command=self.sheildbox_test).pack(side=BOTTOM)
+			WAIT_TIME_S = self.entry1.get()
+			WAIT_TIME_M = self.entry2.get()
+			WAIT_TIME_L = self.entry3.get()
 
 	def run_fw_script(self):
 		date_time = time.strftime(" %Y-%m-%d %H-%M-%S-%p")
@@ -287,9 +299,7 @@ class Window():
 		global counter_close
 		OPEN = "OPEN\f"
 		CLOSE = "CLOSE\f"
-		WAIT_TIME_S = self.entry1.get()
-		WAIT_TIME_M = self.entry2.get()
-		WAIT_TIME_L = self.entry3.get()
+
 		print "Time intervals: %s, %s & %s" %(WAIT_TIME_S, WAIT_TIME_S, WAIT_TIME_S)
 
 		ser = ser = serial.Serial(port='/dev/cu.usbserial',
